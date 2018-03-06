@@ -3,11 +3,14 @@ MAINTAINER Frank Gu <499397328@qq.com>
 
 RUN apk add --no-cache tzdata bash
 
+COPY requirements.txt /usr/src
+
 # 安装influxdb工具集1.4.3版本为了进行备份
 ENV INFLUXDB_VERSION 1.4.3
 RUN set -ex && \
-    apk add --no-cache --virtual .build-deps wget gnupg tar ca-certificates && \
+    apk add --no-cache --virtual .build-deps wget gnupg tar ca-certificates py-pip python-dev && \
     update-ca-certificates && \
+    pip install -r /usr/src/requirements.txt && \
     for key in \
         05CE15085FC09D18E99EFB22684A14CF2582E0C5 ; \
     do \

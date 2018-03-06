@@ -4,7 +4,7 @@ set -e
 BUILD_PATH=`pwd`
 
 cp ../main.py ./
-
+cp ../requirements.txt ./
 docker build -f ./Dockerfile -t gubinempower/influxdb-tools .
 
 docker tag gubinempower/influxdb-tools gubinempower/influxdb-tools:0.0.1
