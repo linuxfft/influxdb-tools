@@ -104,3 +104,4 @@ ENV/
 .idea/
 
 docker/*.py
+docker/*.txt
