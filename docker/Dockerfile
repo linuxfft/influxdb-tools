@@ -1,6 +1,12 @@
 FROM python:3.6.4-alpine3.7
 MAINTAINER Frank Gu <499397328@qq.com>
 
+#RUN rm /etc/apk/repositories && touch /etc/apk/repositories
+#RUN echo "http://mirrors.ustc.edu.cn/alpine/v3.7/main/" >> /etc/apk/repositories \
+#    && echo "http://mirrors.ustc.edu.cn/alpine/v3.7/community/" >> /etc/apk/repositories \
+#    && cat /etc/apk/repositories \
+#    && apk update
+
 RUN apk add --no-cache tzdata bash
 
 COPY requirements.txt /usr/src
@@ -8,9 +14,9 @@ COPY requirements.txt /usr/src
 # 安装influxdb工具集1.4.3版本为了进行备份
 ENV INFLUXDB_VERSION 1.4.3
 RUN set -ex && \
-    apk add --no-cache --virtual .build-deps wget gnupg tar ca-certificates py-pip python-dev && \
+    apk add --no-cache --virtual .build-deps wget gnupg tar ca-certificates python3-dev && \
     update-ca-certificates && \
-    pip install -r /usr/src/requirements.txt && \
+    pip3 install -r /usr/src/requirements.txt && \
     for key in \
         05CE15085FC09D18E99EFB22684A14CF2582E0C5 ; \
     do \
@@ -26,8 +32,9 @@ RUN set -ex && \
     rm -f /usr/src/influxdb-*/influxdb.conf && \
     chmod +x /usr/src/influxdb-*/* && \
     cp -a /usr/src/influxdb-*/* /usr/bin/ && \
-    rm -rf *.tar.gz* /usr/src /root/.gnupg && \
-    apk del .build-deps
+    rm -rf *.tar.gz* /usr/src && \
+    apk del .build-deps && \
+    mkdir -p /usr/src
 
 COPY entrypoint.sh /
 
