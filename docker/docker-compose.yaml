@@ -1,15 +1,13 @@
 version: '2'
 services:
-    netdata:
+    influxdb-tools:
         image: "gubinempower/influxdb-tools"
         volumes:
-            - /data/influxdb:/var/lib/influxdb
+            - /data/influxdbbackup:/var/lib/influxdb
         restart: "always"
         environment:
-            - HOST=127.0.0.1
+            - HOST=192.168.1.12
             - PORT=8088
             - DATABASE=empoweriot
             - DIR=/var/lib/influxdb/backup
-            - INTERVAL=86400
-            - SSMTP_HOSTNAME=cloudahead.net
-            - NETDATA_ARGS="-i 127.0.0.1"
+            - INTERVAL=5
