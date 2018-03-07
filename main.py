@@ -41,7 +41,7 @@ def compress(dir: str, ignore_suffix='gz'):
                 file_path = os.path.join(dirpath, filename)
                 f_out.add(file_path, arcname=filename)
                 os.remove(file_path)
-    print('压缩成功')
+    print(u'压缩成功')
 
 
 def dump(*args,  **kargs:Dict[str, Any]) -> None:
@@ -52,7 +52,6 @@ def dump(*args,  **kargs:Dict[str, Any]) -> None:
                                                                                      kargs['host'], kargs['port'],
                                                                                      kargs['retention'], kargs["dir"])
         cmd_list = cmd.split(' ')
-        print(cmd_list)
         p = subprocess.Popen(cmd, stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr, shell=True)
         ret: int = p.wait()
         if ret == 0:
