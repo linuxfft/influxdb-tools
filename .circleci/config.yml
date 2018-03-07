@@ -5,8 +5,8 @@ jobs:
       only:
         - master
     resource_class: xlarge
-    docker:
-      - image: circleci/python:3.6-jessie-node-browsers
+#    docker:
+#      - image: circleci/python:3.6-jessie-node-browsers
     steps:
       - checkout
       - setup_remote_docker:
