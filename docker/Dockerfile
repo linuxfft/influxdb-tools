@@ -42,6 +42,9 @@ WORKDIR /usr/src
 
 COPY main.py /usr/src
 
+RUN set -ex && \
+    ln -s /usr/src/main.py /usr/bin
+
 VOLUME /var/lib/influxdb
 
 ENTRYPOINT ["/entrypoint.sh"]
