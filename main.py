@@ -20,6 +20,8 @@ end: bool = False
 
 t: Process = None
 
+MIN_INTERVAL: float = 60.0
+
 logger = logging.getLogger("influxdb-tools")
 formatter = logging.Formatter('%(name)-12s %(asctime)s %(levelname)-4s %(message)s', '%a, %d %b %Y %H:%M:%S',)
 stream_handler = logging.StreamHandler(sys.stdout)
@@ -46,7 +48,9 @@ def compress(dir: str, ignore_suffix='gz'):
 
 def dump(*args,  **kargs:Dict[str, Any]) -> None:
     """Create a backup."""
+    _interval: float = float(kargs['interval'])
     while not end:
+        _start = time.time()
         logger.info(u'开始备份数据库: ' + str(kargs['database']))
         cmd = "influxd backup -database {0} -host {1}:{2} -retention {3} {4}".format(kargs['database'],
                                                                                      kargs['host'], kargs['port'],
@@ -59,7 +63,12 @@ def dump(*args,  **kargs:Dict[str, Any]) -> None:
         else:
             logger.error(u'备份数据库失败: ' + str(kargs['database']))
         compress(str(kargs['dir']))
-        time.sleep(kargs['interval'])
+        _diff = time.time() - _start
+        _t = _interval - _diff
+        if _t < MIN_INTERVAL:  # 小于0 或者 小于MIN_INTERVAL
+            time.sleep(MIN_INTERVAL)  # MIN_INTERVAL to go
+        else:
+            time.sleep(_t)
 
 
 def raise_keyboard_interrupt(signum, frame) -> None:
